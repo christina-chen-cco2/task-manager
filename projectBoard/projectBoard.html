@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>Task Manager</title>
+	<meta charset="UTF-8">
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+	
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css">
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.js"></script>
+	
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fomantic-ui/2.8.6/components/calendar.min.css">
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/fomantic-ui/2.8.6/components/calendar.min.js"></script>
+	
+	<script src="https://cdn.tiny.cloud/1/hzn5qpwctuac6f375d02wg884kqjx3ajjndphdscjvj54gaq/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
+	<script src='https://cdn.tiny.cloud/1/hzn5qpwctuac6f375d02wg884kqjx3ajjndphdscjvj54gaq/tinymce/5/tinymce.min.js' referrerpolicy="origin"></script>
+	
+	<script src="projectBoard.js"></script>
+	
+	<script>
+        tinymce.init({
+            selector: '#taskDescription',
+            toolbar:
+                'undo redo | styleselect | bold italic underline | alignleft aligncenter alignright alignjustify'
+        });
+	</script>
+	<style>
+		table {
+			width: 100%;
+		}
+		#projectBoard tr td {
+			vertical-align: top;
+		}
+		#projectBoard {
+			border-collapse: separate;
+			border-spacing: 20px;
+		}
+	</style>
+</head>
+
+<body>
+
+
+
+<div class="ui right vertical borderless menu sidebar" id="workspace" style="width: 35vw; padding: 5px">
+	<div class="ui basic segment" style="padding-top: 0; margin-bottom: 20px; position: relative">
+		<button class="ui compact tiny grey icon button" style="position: absolute; right: 0">
+			<i class="small plus icon" style="padding-top: 1px"></i> Create Task
+		</button>
+	</div>
+	<div class="item"><div class="ui center aligned large header">Create New Task</div></div>
+	<div class="ui divider"></div>
+	<div class="item">
+		<div class="ui fluid selection dropdown" id="tasklistDropdown">
+			<i class="dropdown icon"></i>
+			<div class="default text">Task List</div>
+			<div class="menu" id="tasklistMenu"></div>
+		</div>
+	</div>
+	<div class="item">
+		<div class="ui big secondary pointing menu" style="margin: 0 1px 0 1px">
+			<a class="item" onclick="switchPanes('task')" id="taskMenuSelection">Task</a>
+			<a class="item" onclick="switchPanes('issues')" id="issuesMenuSelection">Issues</a>
+		</div>
+	</div>
+	<div class="item">
+		<div id="taskIssuesMenu"></div>
+	</div>
+	<div class="item"><button class="ui fluid primary button">Create</button></div>
+</div>
+
+
+<template id="taskCardTemplate">
+	<div class="ui centered fluid raised card" draggable="true" ondragstart="drag(event)" id="taskCard">
+		<div class="content">
+			<div class="ui fluid input"><input type="text" placeholder="Task Name"></div>
+			<div style="padding-top: 10px; vertical-align: middle">
+				<div id="currentDate" class="meta" style="display: inline-block; margin-top: 13px"></div>
+				<div class="ui compact floating selection multiple dropdown" id="userDropdown"
+				     style="display: inline-block; border: none; float: right;">
+					<i class="dropdown icon"></i>
+					<div class="default text">Team Members</div>
+					<div class="ui menu" id="userMenu"></div>
+				</div>
+			</div>
+		</div>
+		<div class="content">
+			<div class="ui form">
+				<div class="ui field"><textarea id="taskDescription" rows="15"></textarea></div>
+			</div>
+		</div>
+		<div class="content">
+			<div class="ui compact selection floating dropdown" id="labelDropdown" style="display: inline-block; border: none">
+				<i class="dropdown icon"></i>
+				<div class="default text">Label</div>
+				<div class="ui menu" id="labelMenu"></div>
+			</div>
+			<div class="ui calendar" id="dueDateCalendar" style="float: right; display: inline-block">
+				<div class="ui input left icon">
+					<i class="calendar icon"></i>
+					<input type="text" placeholder="Due Date" id="dueDate">
+					<i class="calendar alternate outline icon"></i>
+				</div>
+			</div>
+		</div>
+	</div>
+</template>
+
+
+<template id="issuesFeedTemplate">
+	<div class="ui minimal comments" id="issuesFeed">
+		<div class="comment">
+			<a class="avatar">
+				<div class="ui tiny label" style="background-color: darkred; color: white; display: inline-block">
+					#18.1
+				</div>
+				<i class="large green check icon" style="margin-left: 10px; margin-top: 8px"></i>
+			</a>
+			<div class="content">
+				<a class="author" style="display: inline-block">Christina</a>
+				<div class="metadata">
+					<span class="date">6/12/20</span>
+				</div>
+				<div class="text">too hard. can't do. to the trash bin blahblah blah <br/>blahblah blahblah blah blah blah</div>
+				<div class="comments">
+					<div class="comment">
+						<div class="content">
+							<a class="author">Christine</a>
+							<div class="metadata"><span class="date">6/19/20</span></div>
+							<div class="text">yes</div>
+						</div>
+					</div>
+					<div class="comment">
+						<div class="content">
+							<a class="author">Jill</a>
+							<div class="metadata"><span class="date">6/19/20</span></div>
+							<div class="text">ok</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="comment">
+			<a class="avatar">
+				<div class="ui tiny label" style="background-color: darkred; color: white; display: inline-block">
+					#18.2
+				</div>
+			</a>
+			<div class="content">
+				<a class="author">Christina2</a>
+				<div class="metadata"><span class="date">6/12/20</span></div>
+				<div class="text">revived</div>
+			</div>
+		</div>
+	</div>
+</template>
+
+
+<div class="pusher" style="height: 100vh">
+	<div style="overflow-x: auto; height: 100vh" id="pusherContent">
+		<button class="ui grey icon button" id="button" onclick="document.getElementById('pusherContent').style.width = '65vw'">
+			<i class="bars icon"></i> Workspace
+		</button>
+		<div class="ui basic padded segment" style="padding-top: 10px">
+			<table id="projectBoard" style="width: 95vw; margin: auto">
+				<tr id="projectBoardRow"></tr>
+			</table>
+		</div>
+	</div>
+</div>
+
+
+
+
+
+</body>
+</html>

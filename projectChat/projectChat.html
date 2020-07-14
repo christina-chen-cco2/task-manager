@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Title</title>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css">
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.js"></script>
+	<script src="/socket.io/socket.io.js"></script>
+	<script src="projectChat.js"></script>
+	<script>
+		const socket = io();
+		socket.on("messaging", (serverMessage) => {
+		    console.log(serverMessage)
+		})
+	</script>
+	<style>
+		table, th, td {
+			border: 1px solid lightgray;
+			padding: 20px;
+			vertical-align: top;
+		}
+		table {
+			border-collapse: collapse;
+			position: absolute;
+			height: 84vh;
+		}
+	</style>
+</head>
+<body>
+
+<div style="position: relative">
+	<table>
+		<colgroup><col style="width: 25%"></colgroup>
+		<tr>
+			<td rowspan="2">
+				<div class="ui vertical massive secondary fluid menu" style="width: 100%">
+					<a class="item">
+						<i style="float: left; margin-right: 5px" class="ui icon user circle outline"></i>
+						Adam Adam
+						<i style="float: right; margin-top: 7px" class="ui icon tiny blue circle"></i>
+					</a>
+					<a class="item">
+						<i style="float: left; margin-right: 5px" class="ui icon user circle outline"></i>
+						Jane Doe
+						<i style="float: right; margin-top: 7px" class="ui icon tiny blue circle"></i>
+					</a>
+					<a class="item">
+						<i style="float: left; margin-right: 5px" class="ui icon user circle outline"></i>
+						John Smith
+						<i style="float: right; margin-top: 7px" class="ui icon tiny grey circle"></i>
+					</a>
+					<a class="item">
+						<i style="float: left; margin-right: 5px" class="ui icon user group"></i>
+						Everyone
+					</a>
+				</div>
+			</td>
+			<td style="height: 75%"></td>
+		</tr>
+		<tr>
+			<td>
+				<div class="ui form">
+					<div class="field">
+								<textarea style="border: none; padding: 0; resize: none"
+								          rows="10" placeholder="Type message here..."></textarea>
+					</div>
+				</div>
+			</td>
+		</tr>
+	</table>
+</div>
+
+</body>
+</html>

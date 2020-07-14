@@ -1,0 +1,11 @@
+table {
+    width: 100%;
+}
+#projectBoard tr td {
+    vertical-align: top;
+}
+#projectBoard {
+    border-collapse: separate;
+    border-spacing: 20px;
+}
+

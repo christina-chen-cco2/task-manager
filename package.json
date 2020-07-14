@@ -1,0 +1,11 @@
+{
+  "name": "project-chat",
+  "version": "0.0.1",
+  "description": "",
+  "dependencies": {
+    "require": "^2.4.20"
+  },
+  "devDependencies": {
+    "socket.io": "^2.3.0"
+  }
+}

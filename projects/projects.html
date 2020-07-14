@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Title</title>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css">
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.js"></script>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fomantic-ui/2.8.6/components/calendar.min.css">
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/fomantic-ui/2.8.6/components/calendar.min.js"></script>
+	<script src="projects.js"></script>
+</head>
+<body>
+
+
+<!--
+SETTINGS PAGE FOR RACH PROJECT
+can only enter/edit name and planned date and team memebers from there
+
+-->
+
+<template id="priorityBadgesTemplate">
+	<table style="border: none; border-collapse: collapse; color: white; font-size: 11px; position: absolute; top: -30%; right: -10%"
+	       id="priorityBadges">
+		<tr>
+			<td style="padding: 3px 5px 4px 5px; background-color: #E03A96; border-top-left-radius: 15%; border-bottom-left-radius: 15%">
+				33
+			</td>
+			<td style="padding: 3px 5px 4px 5px; background-color: #FCBC09; border-top-right-radius: 15%; border-bottom-right-radius: 15%">
+				2
+			</td>
+		</tr>
+	</table>
+</template>
+<template id="projectTemplate">
+	<div class="item" style="padding-top: 0; padding-bottom: 0" id="project">
+		<table style="width: 100%; padding: 10px">
+			<colgroup><col style="width: 80%"></colgroup>
+			<tr>
+				<td><div class="ui large header" id="projectNameDisplay"></div></td>
+				<td rowspan="2">
+					<div class="ui right floated large label" style="position: relative;" id="projectStatus"></div>
+				</td>
+			</tr>
+			<tr>
+				<td style="font-size: 12px">
+					<div class="content" id="startedDateDisplay"></div>
+					<div class="content" id="plannedDateDisplay"></div>
+				</td>
+			<tr>
+		</table>
+		<div class="ui bottom attached progress" style="background-color: #F8F8F8"><div class="bar" style="background-color: lightblue" data-tooltip="15%"></div></div>
+	</div>
+</template>
+
+
+<div class="ui basic modal" id="successModal">
+	<div class="header" id="successHeader" style="text-align: center"></div>
+</div>
+<div style="position: relative" class="ui modal" id="addProjectModal">
+	<div class="actions" style="background-color: white; padding: 0">
+		<button class="circular ui tiny compact cancel icon button" style="position: absolute; top: -3%; right: -2%">
+			<i class="icon times"></i>
+		</button>
+	</div>
+	<div class="header">Create New Project</div>
+	<div class="description">
+		<div class="ui basic padded segment">
+			<form class="ui form" style="padding-bottom: 15px; padding-top: 15px">
+				<div class="field">
+					<label>Project Name</label>
+					<input type="text" placeholder="Project Name" id="projectName" required>
+				</div>
+				<div class="field" style="margin-top: 25px">
+					<label>Planned Completion Date</label>
+					<div class="ui calendar" id="plannedDateCalendar">
+						<div class="ui input left icon">
+							<i class="calendar icon"></i>
+							<input type="text" placeholder="Planned Date" id="plannedDate" required>
+							<i class="calendar alternate outline icon"></i>
+						</div>
+					</div>
+				</div>
+				<div class="field" style="margin-top: 25px">
+					<label>Team Members</label>
+					<label style="font-weight: normal">
+						Enter the username(s) of your team members for this project.
+					</label>
+					<div class="ui multiple selection search dropdown" id="teamMembersDropdown">
+						<input id="teamMembers" type="hidden">
+						<i class="dropdown icon"></i>
+						<div class="default text"><i class="user icon"></i> Username(s)</div>
+						<div class="menu" id="teamMembersMenu"></div>
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+	<div class="actions"><button class="ui primary approve button">Create</button></div>
+</div>
+
+
+<button class="ui grey icon button" id="addProjectButton">
+	<i class="small plus icon" style="padding-top: 1px"></i> Create Project
+</button>
+<div style="position: relative;">
+	<div class="ui container raised segment" style="position: absolute; height: 80vh; left: 0; right: 0; top: 5vh; width: 40vw;
+		padding: 0 0 0 0">
+		<div class="ui very relaxed selection list" id="projectList"></div>
+	</div>
+</div>
+
+
+
+<!--<div style="position: relative;">
+	<div class="ui container raised segment" style="position: absolute; height: 80vh; left: 0; right: 0; top: 5vh; width: 40vw;
+			padding: 0 0 0 0">
+		<div class="ui very relaxed selection list">
+			<div class="item" style="padding-top: 0; padding-bottom: 0">
+				<table style="width: 100%; padding: 10px">
+					<colgroup><col style="width: 80%"></colgroup>
+					<tr>
+						<td><div class="ui large header">Task Manager</div></td>
+						<td rowspan="2">
+							<div class="ui right floated large label" style="position: relative;">
+								In Progress
+								<table style="border: none; border-collapse: collapse; color: white; font-size: 11px;
+										position: absolute; top: -30%; right: -10%">
+									<tr>
+										<td style="padding: 3px 5px 4px 5px; background-color: #E03A96;
+											border-top-left-radius: 15%; border-bottom-left-radius: 15%">
+											33
+										</td>
+										<td style="padding: 3px 5px 4px 5px; background-color: #FCBC09;
+											border-top-right-radius: 15%; border-bottom-right-radius: 15%">
+											2
+										</td>
+									</tr>
+								</table>
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<td style="font-size: 12px">
+							<div class="content">Started: 7/4/2020</div>
+							<div class="content">Planned: 9/1/2020</div>
+						</td>
+					<tr>
+				</table>
+				<div class="ui bottom attached progress" style="background-color: #F8F8F8">
+					<div class="bar" style="background-color: lightblue" data-tooltip="15%"></div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>-->
+
+
+</body>
+</html>

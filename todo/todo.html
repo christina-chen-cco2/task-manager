@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>Task Manager</title>
+	<meta charset="UTF-8">
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css">
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.js"></script>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fomantic-ui/2.8.6/components/calendar.min.css">
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/fomantic-ui/2.8.6/components/calendar.min.js"></script>
+	<script src="todo.js"></script>
+	<style>
+		#checkbox:hover {
+			border: 1px solid lightblue !important;
+		}
+		#completedLabel:hover {
+			color: black;
+			background-color: cadetblue !important;
+		}
+		#plus:hover {
+			color: black;
+		}
+	</style>
+</head>
+
+<body>
+
+
+<div id="todo_userNavbar"></div>
+<div id="todo_projectNavbar"></div>
+
+<script>
+
+</script>
+
+
+<template id="taskTemplate">
+	<div class="item" id="task" onclick="editTask('')">
+		<table style="width: 100%">
+			<colgroup><col style="width: 7%"><col style="width: 63%"><col style="width: 30%"></colgroup>
+			<tr>
+				<td>
+					<div id="checkbox" style="border: 1px solid lightgray; border-radius: 50%; width: 23px; height: 23px;"
+					     onclick="checkbox('')"></div>
+				</td>
+				<td>
+					<div class="content">
+						<div class="header" style="padding-bottom: 10px" id="taskName"></div>
+						<div id="taskDescription" style="color: black; font-size: 14px"></div>
+					</div>
+				</td>
+				<td>
+					<div class="content" style="line-height: 18px;">
+						<div id="taskTime"></div>
+						<div id="taskDuration"></div>
+						<div id="taskPlace"></div>
+					</div>
+				</td>
+			</tr>
+		</table>
+	</div>
+</template>
+
+
+<div class="ui large popup" id="popup">
+	<div class="ui fluid small input">
+		<input type="text" placeholder="Task Name" id="popupName" name="popupName" required>
+	</div>
+	<div class="ui fluid small input">
+		<div class="ui calendar" style="display: inline-block" id="calendar">
+			<div class="ui small left icon input">
+				<input type="text" placeholder="Date/Time" id="popupTime" name="popupTime">
+				<i class="calendar alternate icon"></i>
+			</div>
+		</div>
+		<div class="ui small left icon input" style="display: inline-block">
+			<input type="text" placeholder="Duration" id="popupDuration" name="popupDuration">
+			<i class="clock outline icon"></i>
+		</div>
+	</div>
+	<div class="ui fluid small left icon input">
+		<input type="text" placeholder="Place/Address" id="popupPlace" name="popupPlace">
+		<i class="marker alternate icon"></i>
+	</div>
+	<br/>
+	<div class="ui form">
+		<div class="field">
+			<textarea placeholder="Description" id="popupDescription" name="popupDescription"></textarea>
+		</div>
+	</div>
+	<button class="ui tiny icon compact button" onclick="deleteTask('')" style="margin-top: 10px" id="popupDelete">
+		<i class="trash icon"></i>
+	</button>
+	<button class="ui tiny compact right floated primary button" style="margin-top: 10px" onclick="saveTask('')" id="popupSave">Save
+	</button>
+</div>
+
+
+
+<div style="position: relative;">
+	<div class="ui container raised segment"
+	     style="position: absolute; height: 80vh; left: 0; right: 0; top: 5vh; width: 40vw; padding: 0 0 0 0">
+		<div class="ui big very relaxed selection divided list" id="todo" style="padding: 20px"></div>
+		<div class="ui raised vertical segment" style="position: absolute; bottom: 0; width: 100%; height: 6vh; padding: 15px">
+			<a class="ui large ribbon label" style="background-color: lightblue" onclick="loadTasks(false)" id="completedLabel">
+				Completed
+				<div class="detail" id="completedNum"></div>
+			</a>
+			<i style="float: right" class="big link plus icon" onclick="addTask()" id="plus"></i>
+		</div>
+	</div>
+</div>
+
+
+
+</body>
+</html>
